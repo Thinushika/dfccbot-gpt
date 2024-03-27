@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LlamaIndex Express Server</title>
+</head>
+<body>
+  <h1>Welcome to DFCC Chat Bot</h1>
+  
+  <form id="questionForm">
+    <label for="question">Ask a question:</label><br>
+    <textarea type="text" id="question" name="question" required rows="5"></textarea><br><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <div id="response"></div>
+
+  <script>
+    document.getElementById("questionForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const question = document.getElementById("question").value;
+
+      try {
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ question }),
+        });
+
+        const data = await response.json();
+        console.log(data);
+        document.getElementById("response").innerHTML = `Response: ${data}`;
+      } catch (error) {
+        console.error("Error submitting question:", error);
+        document.getElementById("response").innerHTML = "<p>An error occurred.</p>";
+      }
+    });
+  </script>
+</body>
+</html>
